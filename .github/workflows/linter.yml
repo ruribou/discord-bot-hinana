@@ -1,24 +1,33 @@
-name: Golangci-lint ReviewDog
+name: golangci-lint
 on:
-  pull_request:
+  push:
     branches:
       - main
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
-  golangci-lint:
-    permissions:
-      checks: write
-      contents: read
-      pull-requests: write 
+  golangci:
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v2
+      - uses: actions/setup-go@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-check
-          level: warning
-          filter_mode: nofilter
-          golangci_lint_flags: "--config=.golangci.yml"
-          fail_on_error: false
+          go-version: stable
+      - name: Run golangci-lint
+        id: golangci-lint
+        uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.0
+      - name: Run reviewdog
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          tool_name: golangci-lint
+          reporter: github-pr-review
+          filter_mode: diff
+          fail_on_error: true
+          level: error
