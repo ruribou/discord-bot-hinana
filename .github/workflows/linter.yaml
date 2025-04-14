@@ -23,11 +23,3 @@ jobs:
         uses: golangci/golangci-lint-action@v7
         with:
           version: v2.0
-      - name: Run reviewdog
-        uses: reviewdog/action-golangci-lint@v1
-        with:
-          tool_name: golangci-lint
-          reporter: github-pr-review
-          filter_mode: diff
-          fail_on_error: true
-          level: error
