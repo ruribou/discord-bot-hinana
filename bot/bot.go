@@ -22,7 +22,11 @@ func Start(token string) error {
 	if err := dg.Open(); err != nil {
 		return fmt.Errorf("error opening connection: %w", err)
 	}
-	defer dg.Close()
+	defer func() {
+		if err := dg.Close(); err != nil {
+			fmt.Fprintf(os.Stderr, "error closing Discord session: %v\n", err)
+		}
+	}()
 
 	fmt.Println("Bot is running. Press Ctrl+C to exit.")
 
