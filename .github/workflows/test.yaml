@@ -1,4 +1,4 @@
-name: Go CI
+name: golang-test
 on:
   push:
     branches: 
@@ -13,7 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Goのセットアップ
       - name: Set up Go  
         uses: actions/setup-go@v4
         with:
